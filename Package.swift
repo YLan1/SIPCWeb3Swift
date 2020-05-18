@@ -12,6 +12,7 @@ let package = Package(
   dependencies: [
     .package(url: "https://github.com/attaswift/BigInt.git", from: "3.1.0"),
     .package(url: "https://github.com/mxcl/PromiseKit.git", from: "6.4.0"),
+    .package(url: "https://github.com/jedisct1/libsodium.git", from: "6.4.0"),
     ],
   targets: [
     // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -21,7 +22,7 @@ let package = Package(
     .target(name: "scrypt"),
     .target(
       name: "web3swift",
-      dependencies: ["BigInt", "secp256k1", "keccak", "scrypt", "PromiseKit"],
+      dependencies: ["libsodium", "BigInt", "secp256k1", "keccak", "scrypt", "PromiseKit"],
       exclude: [
         "ObjectiveC",
         "Utils/EIP67Code.swift",
@@ -32,3 +33,4 @@ let package = Package(
       dependencies: ["web3swift"]),
     ]
 )
+
