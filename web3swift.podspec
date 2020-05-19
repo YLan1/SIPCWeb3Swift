@@ -17,5 +17,5 @@ Pod::Spec.new do |spec|
     spec.dependency 'secp256k1.c', '~> 0.1'
     spec.dependency 'keccak.c', '~> 0.1'
     spec.dependency 'scrypt.c', '~> 0.1'
-    spec.dependency 'libsodium', '~> 0.1'
+    spec.dependency 'libsodium', '~> 1.0'
 end
