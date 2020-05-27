@@ -17,12 +17,27 @@ import CommonCrypto
 enum AesMode {
     case ctr
     case cbc
+    case ecb
+    case cfb
+    case ofb
+    case rc4
+    case cfb8
     var cc: CCMode {
         switch self {
         case .cbc:
             return CCMode(kCCModeCBC)
         case .ctr:
             return CCMode(kCCModeCTR)
+        case .ecb:
+            return CCMode(kCCModeECB)
+        case .cfb:
+            return CCMode(kCCModeCFB)
+        case .ofb:
+            return CCMode(kCCModeOFB)
+        case .rc4:
+            return CCMode(kCCModeRC4)
+        case .cfb8:
+            return CCMode(kCCModeCFB8)
         }
     }
     enum Error: Swift.Error {
@@ -32,6 +47,11 @@ enum AesMode {
         switch string {
         case "aes-128-ctr": self = .ctr
         case "aes-128-cbc": self = .cbc
+        case "aes-128-ecb": self = .ecb
+        case "aes-128-cfb": self = .cfb
+        case "aes-128-ofb": self = .ofb
+        case "aes-128-rc4": self = .rc4
+        case "aes-128-CFB8": self = .cfb8
         default: throw Error.invalidType(string)
         }
     }
@@ -39,6 +59,11 @@ enum AesMode {
         switch self {
         case .ctr: return CTR(iv: iv.bytes)
         case .cbc: return CBC(iv: iv.bytes)
+        case .ecb: return ECB(iv: iv.bytes)
+        case .cfb: return CFB(iv: iv.bytes)
+        case .ofb: return OFB(iv: iv.bytes)
+        case .rc4: return RC4(iv: iv.bytes)
+        case .cfb8: return CFB8(iv: iv.bytes)
         }
     }
 }
@@ -66,6 +91,21 @@ func CBC(iv: [UInt8]) -> BlockMode {
 }
 func CTR(iv: [UInt8]) -> BlockMode {
     return BlockMode(mode: .ctr, iv: Data(iv))
+}
+func ECB(iv: [UInt8]) -> BlockMode {
+    return BlockMode(mode: .ecb, iv: Data(iv))
+}
+func CFB(iv: [UInt8]) -> BlockMode {
+    return BlockMode(mode: .cfb, iv: Data(iv))
+}
+func OFB(iv: [UInt8]) -> BlockMode {
+    return BlockMode(mode: .ofb, iv: Data(iv))
+}
+func RC4(iv: [UInt8]) -> BlockMode {
+    return BlockMode(mode: .rc4, iv: Data(iv))
+}
+func CFB8(iv: [UInt8]) -> BlockMode {
+    return BlockMode(mode: .cfb8, iv: Data(iv))
 }
 
 class AES {

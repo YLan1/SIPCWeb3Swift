@@ -163,7 +163,6 @@ public class EthereumKeystoreV3: AbstractKeystore {
         var dataForMAC = Data()
         dataForMAC.append(derivedKey.suffix(16))
         guard let cipherText = Data.fromHex(keystoreParams.crypto.ciphertext) else { return nil }
-        if cipherText.count != 32 { return nil }
         dataForMAC.append(cipherText)
         let mac = dataForMAC.keccak256()
         guard let calculatedMac = Data.fromHex(keystoreParams.crypto.mac), mac.constantTimeComparisonTo(calculatedMac) else { return nil }
@@ -177,6 +176,21 @@ public class EthereumKeystoreV3: AbstractKeystore {
             decryptedPK = try aesCipher.decrypt(cipherText.bytes)
         case "aes-128-cbc":
             let aesCipher = AES(key: decryptionKey.bytes, blockMode: CBC(iv: IV.bytes), padding: .noPadding)
+            decryptedPK = try aesCipher.decrypt(cipherText.bytes)
+        case "aes-128-ecb":
+            let aesCipher = AES(key: decryptionKey.bytes, blockMode: ECB(iv: IV.bytes), padding: .noPadding)
+            decryptedPK = try aesCipher.decrypt(cipherText.bytes)
+        case "aes-128-cfb":
+            let aesCipher = AES(key: decryptionKey.bytes, blockMode: CFB(iv: IV.bytes), padding: .noPadding)
+            decryptedPK = try aesCipher.decrypt(cipherText.bytes)
+        case "aes-128-ofb":
+            let aesCipher = AES(key: decryptionKey.bytes, blockMode: OFB(iv: IV.bytes), padding: .noPadding)
+            decryptedPK = try aesCipher.decrypt(cipherText.bytes)
+        case "aes-128-rc4":
+            let aesCipher = AES(key: decryptionKey.bytes, blockMode: RC4(iv: IV.bytes), padding: .noPadding)
+            decryptedPK = try aesCipher.decrypt(cipherText.bytes)
+        case "aes-128-cfb8":
+            let aesCipher = AES(key: decryptionKey.bytes, blockMode: CFB8(iv: IV.bytes), padding: .noPadding)
             decryptedPK = try aesCipher.decrypt(cipherText.bytes)
         default:
             return nil
